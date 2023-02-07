@@ -3,6 +3,7 @@
 * Random int8 numpy array is generated when the input file is not provided --> Anakha tested with this one (guess)
 * So changed the line 80 in pvaClient.py --> from 'shortValue' to 'floatValue'
 
+* 1st test with 128x128x100Hz, ptychoNN_8_128.onnx (batch size is 8, I don't know what this means....)
 Device       NAME                     CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         GPU Memory
 Dell Blade   PtychoNN-Client          39.80%    1.789GiB / 31.04GiB   5.76%     0B / 0B           0B / 8.19kB       979MiB
 Orin         PtychoNN-Server          6.31%     159.8MiB / 29.94GiB   0.52%     0B / 0B           0B / 0B           0MiB
