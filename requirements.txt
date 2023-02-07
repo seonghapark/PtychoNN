@@ -1,0 +1,4 @@
+pvapy
+scikit-image
+torch
+torchvision
