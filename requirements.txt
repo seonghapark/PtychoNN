@@ -1,3 +1,4 @@
+numpy==1.22.2
 pvapy
 scikit-image
 torch

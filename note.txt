@@ -1,0 +1,8 @@
+* Reading from .npy file is a numpy array of float32s
+* Original client file requires int8 numpy array --> Does not fit to the above condition
+* Random int8 numpy array is generated when the input file is not provided --> Anakha tested with this one (guess)
+* So changed the line 80 in pvaClient.py --> from 'shortValue' to 'floatValue'
+
+Device       NAME                     CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         GPU Memory
+Dell Blade   PtychoNN-Client          39.80%    1.789GiB / 31.04GiB   5.76%     0B / 0B           0B / 8.19kB       979MiB
+Orin         PtychoNN-Server          6.31%     159.8MiB / 29.94GiB   0.52%     0B / 0B           0B / 0B           0MiB
