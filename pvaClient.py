@@ -77,7 +77,8 @@ class pvaClient:
         dims  = pv['dimension']
         rows  = dims[0]['size']
         cols  = dims[1]['size']
-        frame = pv['value'][0]['shortValue']
+        #frame = pv['value'][0]['shortValue']
+        frame = pv['value'][0]['floatValue']
 
         if(not(self.recv_frames%1000)):
             tmp_frame_loss = self.recv_frames -(uid - self.base_seq_id + 1)
