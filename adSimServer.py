@@ -29,7 +29,7 @@ class AdSimServer:
         if frame_rate > 0:
             self.delta_t = 1.0/frame_rate
         self.runtime = runtime
-        self.report_frequency = report_frequency 
+        self.report_frequency = report_frequency
 
         input_files = []
         if input_directory is not None:

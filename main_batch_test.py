@@ -27,7 +27,7 @@ def main(bsz, cn):
     # initialize pva, it pushes frames into tq_frame
     client = pvaClient(tq_frame)
 
-    infer_engine = inferPtychoNNtrt(client, mbsz=bsz, onnx_mdl = 'ptychoNN_8.onnx',tq_diff=batch_q, frm_id_q=frm_id_q)
+    infer_engine = inferPtychoNNtrt(client, mbsz=bsz, onnx_mdl = 'model.onnx',tq_diff=batch_q, frm_id_q=frm_id_q)
     print('read onnx model')
 
     c = Channel(cn)

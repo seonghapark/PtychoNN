@@ -1,4 +1,4 @@
-]import pycuda.driver as cuda
+import pycuda.driver as cuda
 import tensorrt as trt
 import logging, torch
 
