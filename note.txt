@@ -4,6 +4,13 @@
 * So changed the line 80 in pvaClient.py --> from 'shortValue' to 'floatValue'
 
 * 1st test with 128x128x100Hz, ptychoNN_8_128.onnx (batch size is 8, I don't know what this means....)
-Device       NAME                     CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O         GPU Memory
-Dell Blade   PtychoNN-Client          39.80%    1.789GiB / 31.04GiB   5.76%     0B / 0B           0B / 8.19kB       979MiB
-Orin         PtychoNN-Server          6.31%     159.8MiB / 29.94GiB   0.52%     0B / 0B           0B / 0B           0MiB
+Device       NAME                CPU %     MEM USAGE / LIMIT     MEM %     NET I/O      BLOCK I/O       GPU Memory   GPU-Util
+Dell Blade   PtychoNN-Client     39.80%    1.789GiB / 31.04GiB   5.76%     0B / 0B      0B / 8.19kB     979MiB       35%      (max)
+                                 36.79%    1.786GiB / 31.04GiB   5.75%     0B / 0B      0B / 0B         801MiB        5%      (avg)
+Orin         PtychoNN-Server     6.31%     159.8MiB / 29.94GiB   0.52%     0B / 0B      0B / 0B         0MiB
+
+* Additional tests
+CONDITION                        CPU %     MEM USAGE / LIMIT     MEM %     NET I/O      BLOCK I/O       GPU Memory   GPU-Util
+2nd test with 128x128x200Hz      89.11%    1.786GiB / 31.04GiB   5.75%     0B / 0B      0B / 0B         801MiB       15%
+3rd test with 128x128x400Hz      111.56%   1.787GiB / 31.04GiB   5.76%     0B / 0B      0B / 0B         801MiB       16%
+4th test with 128x128x450Hz      122.30%   2.258GiB / 31.04GiB   7.27%     0B / 0B      0B / 0B         801MiB       19%      (max Hz)
