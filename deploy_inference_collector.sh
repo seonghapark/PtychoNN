@@ -5,7 +5,7 @@ docker run -d \
 --name pva-infer-collector \
 --network host \
 --entrypoint pvapy-hpc-collector \
-classicblue/ptychonn:0.2.1 \
+classicblue/ptychonn:0.4.0 \
   --collector-id 1 \
   --producer-id-list "range(1,10,1)" \
   --input-channel processor:*:output \
@@ -16,4 +16,5 @@ classicblue/ptychonn:0.2.1 \
   --report-period 10 \
   --server-queue-size 1000 \
   --collector-cache-size 10000 \
-  --monitor-queue-size 2000
+  --monitor-queue-size 2000 \
+  --disable-curses

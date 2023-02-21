@@ -4,10 +4,15 @@ docker:
 
 infra:
 	./deploy_mirror_server.sh
-	
+	./deploy_inference_collector.sh
+	./deploy_inference_savefile.sh ./output
+
+cinfra:
+	docker rm -f pva-mirror-server \
+	  pva-infer-collector \
+	  pva-infer-save
 
 infer:
 	./deploy.sh 1
 
-clean:
-	docker rm -f pva-mirror-server
+clean: cinfra 

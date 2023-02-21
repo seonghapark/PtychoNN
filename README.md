@@ -22,7 +22,7 @@ docker run -d --rm \
   --name pva-mirror-server \
   --network host \
   --entrypoint pvapy-mirror-server \
-  classicblue/ptychonn:0.2.1 \
+  classicblue/ptychonn:0.4.0 \
   --channel-map "(pvapy:image,ad:image,pva,2000)"
 ```
 
@@ -62,7 +62,7 @@ docker run -d --rm \
   --name pva-sim-server \
   --network host \
   --entrypoint pvapy-ad-sim-server \
-  classicblue/ptychonn:0.2.1 \
+  classicblue/ptychonn:0.4.0 \
   --channel-name ad:image \
   --n-x-pixels 128 \
   --n-y-pixels 128 \
