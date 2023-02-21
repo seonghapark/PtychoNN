@@ -19,12 +19,13 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         self.inferTime = 0
 
         self.bsz = configDict.get('bsz', 8)
-        self.onnx_mdl = configDict.get('onnx_mdl', '/home/beams/ABABU/ptychoNN-test/new_models/training4_1.8khz/ptychoNN_8.onnx')
+        self.onnx_mdl = configDict.get('onnx_mdl', '/app/model_128.onnx')
+        self.nGPU = int(configDict.get("n_gpu", 1))
         self.isDone = False
 
     def inferWorker(self):
         self.logger.debug('Starting infer worker')
-        self.gpu = (self.processorId - 1) % 2
+        self.gpu = (self.processorId - 1) % self.nGPU
         self.logger.debug(f'Using gpu: {self.gpu}')
         os.environ['CUDA_VISIBLE_DEVICES'] = str(self.gpu)
         from pvaInferPtychoNN import inferPtychoNNtrt

@@ -23,27 +23,37 @@ docker run -d --rm \
   --network host \
   --entrypoint pvapy-mirror-server \
   classicblue/ptychonn:0.2.1 \
-  --channel-map "(pvapy:image,ad:image,pva,1000)"
+  --channel-map "(pvapy:image,ad:image,pva,2000)"
 ```
 
 ### Run consummers
 ```bash
-docker run -d --rm \
+docker run -ti --rm \
   --name pva-consumer \
   --network host \
+  --runtime nvidia \
+  --shm-size 32G \
   --entrypoint pvapy-hpc-consumer \
-  classicblue/ptychonn:0.2.1 \
+  classicblue/ptychonn:0.3.0-ml-amd64 \
   --input-channel pvapy:image \
   --control-channel processor:*:control \
   --status-channel processor:*:status \
   --output-channel processor:*:output \
   --processor-file /app/inferPtychoNNImageProcessor.py \
   --processor-class InferPtychoNNImageProcessor \
+  --processor-args '{"onnx_mdl": "/app/model_128.onnx"}' \
   --report-period 10 \
   --server-queue-size 100 \
   --monitor-queue-size 1000 \
-  --n-consumers 4 \
-  --distributor-updates 8
+  --distributor-updates 8 \
+  --n-consumers 2 \
+  --disable-curses
+```
+
+### Run stat collector
+```bash
+docker run -d --rm \
+  --name pva-mirror-server \
 ```
 
 ### Run a sim server
