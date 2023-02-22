@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SAVE_PATH=$1
-mkdir -p
+mkdir -p $SAVE_PATH
 
 echo "deploying a file saver for inferencing results"
 docker run -d \
@@ -20,4 +20,5 @@ classicblue/ptychonn:0.4.0 \
   --report-period 10 \
   --server-queue-size 1000 \
   --monitor-queue-size 10000 \
-  --distributor-updates 1
+  --distributor-updates 1 \
+  --disable-curses

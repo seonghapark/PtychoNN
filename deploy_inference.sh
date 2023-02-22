@@ -2,11 +2,13 @@
 
 N_INFERENCE=$1
 
-for n in $N_INFERENCE
+for n in $(seq $N_INFERENCE)
 do
-  echo "deploying inference $n"
+  NAME="pva-consumer-$n"
+  echo "re-deploying inference $n"
+  docker rm $NAME
   docker run -d \
-  --name pva-consumer-$n \
+  --name $NAME \
   --network host \
   --runtime nvidia \
   --shm-size 32G \

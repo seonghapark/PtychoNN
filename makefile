@@ -12,7 +12,8 @@ cinfra:
 	  pva-infer-collector \
 	  pva-infer-save
 
+N_INFERENCE?=1
 infer:
-	./deploy.sh 1
+	./deploy_inference.sh ${N_INFERENCE}
 
 clean: cinfra 
