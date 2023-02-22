@@ -20,6 +20,8 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
 
         self.bsz = configDict.get('bsz', 8)
         self.onnx_mdl = configDict.get('onnx_mdl', '/app/model_128.onnx')
+        self.output_x = configDict.get("output_x", 128)
+        self.output_y = configDict.get("output_y", 128)
         self.nGPU = int(configDict.get("n_gpu", 1))
         self.isDone = False
 
@@ -65,7 +67,7 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
                 frm_id_list = frm_id_list[bsz:]
 
                 t0 = time.time()
-                self.inferEngine.batch_infer(nx, ny)
+                self.inferEngine.batch_infer(nx, ny, self.output_x, self.output_y)
                 t1 = time.time()
                 self.nBatchesProcessed += 1
                 self.nFramesProcessed += bsz
