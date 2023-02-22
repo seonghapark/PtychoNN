@@ -5,7 +5,7 @@ docker run -d \
 --name pva-infer-collector \
 --network host \
 --entrypoint pvapy-hpc-collector \
-classicblue/ptychonn:0.4.0 \
+classicblue/ptychonn:0.5.0 \
   --collector-id 1 \
   --producer-id-list "range(1,10,1)" \
   --input-channel processor:*:output \
