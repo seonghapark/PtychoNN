@@ -6,10 +6,10 @@ docker run -d --rm \
   --network host \
   --entrypoint pvapy-ad-sim-server \
   classicblue/ptychonn:0.5.0 \
-  --channel-name ad:image \
-  --n-x-pixels 128 \
-  --n-y-pixels 128 \
+  --channel-name pvapy:image \
+  --n-x-pixels 512 \
+  --n-y-pixels 512 \
   --datatype int16 \
-  --frame-rate 100 \
+  --frame-rate 2000 \
   --runtime 60 \
   --disable-curses
