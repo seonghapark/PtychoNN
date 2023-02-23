@@ -19,7 +19,7 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         self.inferTime = 0
 
         self.bsz = configDict.get('bsz', 8)
-        self.onnx_mdl = configDict.get('onnx_mdl', '/app/model_128.onnx')
+        self.onnx_mdl = configDict.get('onnx_mdl', '/app/model_128.trt')
         self.output_x = configDict.get("output_x", 128)
         self.output_y = configDict.get("output_y", 128)
         self.nGPU = int(configDict.get("n_gpu", 1))

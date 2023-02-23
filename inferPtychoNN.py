@@ -14,7 +14,12 @@ class inferPtychoNNtrt:
         from helper import engine_build_from_onnx, mem_allocation, inference
         import pycuda.autoinit # must be in the same thread as the actual cuda execution
         self.context = pycuda.autoinit.context
-        self.trt_engine = engine_build_from_onnx(self.onnx_mdl)
+        #self.trt_engine = engine_build_from_onnx(self.onnx_mdl)
+
+        with open(onnx_mdl, "rb") as f:
+            serialized_engine = f.read()
+        self.trt_engine = runtime.deserialize_cuda_engine(serialized_engine)
+
         self.trt_hin, self.trt_hout, self.trt_din, self.trt_dout, \
             self.trt_stream = mem_allocation(self.trt_engine)
         self.trt_context = self.trt_engine.create_execution_context()

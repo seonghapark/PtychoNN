@@ -1,5 +1,5 @@
 numpy==1.22.2
 pvapy==5.2.*
-scikit-image
-torch
-torchvision
+#scikit-image
+#torch
+#torchvision
