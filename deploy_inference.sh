@@ -13,14 +13,14 @@ do
   --runtime nvidia \
   --shm-size 32G \
   --entrypoint pvapy-hpc-consumer \
-  classicblue/ptychonn:0.3.1-ml-amd64 \
+  classicblue/ptychonn:0.4.0-ml-amd64 \
   --input-channel pvapy:image \
   --control-channel processor:$n:control \
   --status-channel processor:$n:status \
   --output-channel processor:$n:output \
   --processor-file /app/inferPtychoNNImageProcessor.py \
   --processor-class InferPtychoNNImageProcessor \
-  --processor-args '{"onnx_mdl": "/app/model_128.onnx", "output_x": 64, "output_y": 64}' \
+  --processor-args '{"onnx_mdl": "/app/model_128.trt", "output_x": 64, "output_y": 64}' \
   --report-period 10 \
   --server-queue-size 10000 \
   --monitor-queue-size 1000 \
