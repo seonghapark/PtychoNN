@@ -1,6 +1,6 @@
 import pycuda.driver as cuda
 import tensorrt as trt
-import logging, torch
+import logging
 
 
 def engine_build_from_onnx(onnx_mdl):
