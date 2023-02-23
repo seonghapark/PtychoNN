@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAVE_PATH=$1
+SAVE_PATH=./output
 mkdir -p $SAVE_PATH
 
 echo "deploying a file saver for inferencing results"
@@ -18,7 +18,7 @@ classicblue/ptychonn:0.5.0 \
   --processor-args '{"outputDirectory" : "/data", "outputFileNameFormat" : "bdp_{uniqueId:06d}.{processorId}.tiff"}' \
   --n-consumers 4 \
   --report-period 10 \
-  --server-queue-size 1000 \
+  --server-queue-size 10000 \
   --monitor-queue-size 10000 \
   --distributor-updates 1 \
   --disable-curses

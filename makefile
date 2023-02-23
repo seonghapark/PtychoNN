@@ -5,12 +5,12 @@ docker:
 infra:
 	./deploy_mirror_server.sh
 	./deploy_inference_collector.sh
-	./deploy_inference_savefile.sh $(pwd)/output
+#	./deploy_inference_savefile.sh
 
 cinfra:
 	docker rm -f pva-mirror-server \
-	  pva-infer-collector \
-	  pva-infer-save
+	  pva-infer-collector
+#	  pva-infer-save
 
 N_INFERENCE?=1
 infer:

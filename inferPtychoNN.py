@@ -25,7 +25,7 @@ class inferPtychoNNtrt:
         except Exception as ex:
             pass
 
-    def batch_infer(self, nx, ny):
+    def batch_infer(self, nx, ny, ox, oy):
         in_mb  = self.tq_diff.get()
         bsz, ny, nx = in_mb.shape
         frm_id_list = self.frm_id_q.get()
@@ -33,9 +33,9 @@ class inferPtychoNNtrt:
         pred = np.array(inference(self.trt_context, self.trt_hin, self.trt_hout, \
                              self.trt_din, self.trt_dout, self.trt_stream))
         
-        pred = pred.reshape(bsz, nx*ny)    
-        for j in range(0, len(frm_id_list)):  
-            image = pred[j].reshape(ny,nx)
+        pred = pred.reshape(bsz, ox*oy)    
+        for j in range(0, len(frm_id_list)):
+            image = pred[j].reshape(oy,ox)
             frameId = int(frm_id_list[j])
             outputNtNdArray = self.pvapyProcessor.generateNtNdArray2D(frameId, image)
             self.pvapyProcessor.updateOutputChannel(outputNtNdArray)

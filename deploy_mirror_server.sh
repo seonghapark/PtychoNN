@@ -6,4 +6,4 @@ docker run -d \
   --network host \
   --entrypoint pvapy-mirror-server \
   classicblue/ptychonn:0.5.0 \
-  --channel-map "(pvapy:image,ad:image,pva,2000)"
+  --channel-map "(pvapy:image,ad:image,pva,20000)"
