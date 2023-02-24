@@ -30,7 +30,8 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         self.gpu = (self.processorId - 1) % self.nGPU
         self.logger.debug(f'Using gpu: {self.gpu}')
         os.environ['CUDA_VISIBLE_DEVICES'] = str(self.gpu)
-        from pvaInferPtychoNN import inferPtychoNNtrt
+        #from pvaInferPtychoNN import inferPtychoNNtrt
+        from inferPtychoNN import inferPtychoNNtrt
         self.inferEngine = inferPtychoNNtrt(self, mbsz=self.bsz, onnx_mdl=self.onnx_mdl, tq_diff=self.batch_q, frm_id_q=self.frm_id_q)
         self.logger.debug(f'Created infer engine using mbsz={self.bsz} and onnx_mdl={self.onnx_mdl}')
         bsz = self.bsz
