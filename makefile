@@ -4,7 +4,7 @@ docker:
 
 infra:
 	./deploy_mirror_server.sh
-	./deploy_inference_collector.sh
+	./deploy_collector.sh
 #	./deploy_inference_savefile.sh
 
 cinfra:
@@ -16,4 +16,7 @@ N_INFERENCE?=1
 infer:
 	./deploy_inference.sh ${N_INFERENCE}
 
-clean: cinfra 
+cinfer:
+	docker rm -f $$(docker ps --filter name=pva-consumer-* -q)
+
+clean: cinfra cinfer
