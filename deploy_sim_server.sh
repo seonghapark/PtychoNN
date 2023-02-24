@@ -6,7 +6,7 @@ docker run -d --rm \
   --network host \
   --entrypoint pvapy-ad-sim-server \
   classicblue/ptychonn:0.5.0 \
-  --channel-name pvapy:image \
+  --channel-name ad:image \
   --n-x-pixels 512 \
   --n-y-pixels 512 \
   --datatype int16 \
