@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "deploying inference collector"
+echo "deploying stat collector"
 docker run -d \
 --name pva-stat-collector \
 --network host \

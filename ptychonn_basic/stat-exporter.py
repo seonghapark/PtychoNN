@@ -6,9 +6,16 @@ from multiprocessing import Process, Queue, Event
 import pvaccess
 
 
-def stat_worker(cn, q, kill_sig):
+def stat_worker(cn, id, q, kill_sig):
     def monitor(pv):
-        q.put(pv.toJSON(False))
+        j = pv.toJSON(False)
+        # all consumers send status with consumerId as 1 :$
+        # we override the id with the channel number as it represents
+        # the actual consumer ID
+        if "consumerId" in j:
+            cid = j.get("consumerId")
+            j["consumerId"] = id + cid - 1
+        q.put(j)
     c = pvaccess.Channel(cn)
     c.subscribe("echo", monitor)
     c.startMonitor()
@@ -27,7 +34,9 @@ def main(args):
     print(args.channels)
     for cn in args.channels:
         print(f'subscribing channel {cn}')
-        w = Process(target=stat_worker, args=(cn, q, kill_signal), daemon=True)
+        id = int(cn.split(":")[2])
+        print(f'channel id: {id}')
+        w = Process(target=stat_worker, args=(cn, id, q, kill_signal), daemon=True)
         w.start()
         workers.append(w)
 

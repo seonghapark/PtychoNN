@@ -2,3 +2,5 @@ numpy==1.22.2
 pvapy==5.2.*
 pillow
 streamlit
+nano
+sh
