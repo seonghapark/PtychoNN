@@ -43,7 +43,7 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
             if self.isDone:
                 break
             try:
-                frm_id, in_frame, ny, nx = self.tq_frame_q.get(block=True, timeout=waitTime)
+                frm_id, in_frame, ny, nx, attr = self.tq_frame_q.get(block=True, timeout=waitTime)
             except queue.Empty:
                 continue
             except KeyboardInterrupt:
@@ -68,7 +68,7 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
                 frm_id_list = frm_id_list[bsz:]
 
                 t0 = time.time()
-                self.inferEngine.batch_infer(nx, ny, self.output_x, self.output_y)
+                self.inferEngine.batch_infer(nx, ny, self.output_x, self.output_y, attr)
                 t1 = time.time()
                 self.nBatchesProcessed += 1
                 self.nFramesProcessed += bsz
@@ -96,7 +96,7 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         if self.isDone:
             return
         (frameId,image,nx,ny,nz,colorMode,fieldKey) = self.reshapeNtNdArray(pvObject)
-        self.tq_frame_q.put((frameId, image, ny, nx))
+        self.tq_frame_q.put((frameId, image, ny, nx, pvObject.get("attribute", [])))
         return pvObject
 
     def resetStats(self):

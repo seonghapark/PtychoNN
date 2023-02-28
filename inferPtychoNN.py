@@ -35,7 +35,7 @@ class inferPtychoNNtrt:
         except Exception as ex:
             pass
 
-    def batch_infer(self, nx, ny, ox, oy):
+    def batch_infer(self, nx, ny, ox, oy, attr):
         # NOTE: model output is always 128,128
         mx = 128
         my = 128
@@ -56,4 +56,7 @@ class inferPtychoNNtrt:
 
             frameId = int(frm_id_list[j])
             outputNtNdArray = self.pvapyProcessor.generateNtNdArray2D(frameId, image)
+            new_attr = outputNtNdArray.get("attribute")
+            new_attr.extend(attr)
+            outputNtNdArray["attribute"] = new_attr
             self.pvapyProcessor.updateOutputChannel(outputNtNdArray)

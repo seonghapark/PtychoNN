@@ -1,34 +1,41 @@
-import pvaccess
-import time
 import streamlit as st
-from streamlit.runtime.scriptrunner import add_script_run_ctx
 import pandas as pd
+import json
 import numpy as np
-from multiprocessing import Queue
+from sh import tail
 
-# df = pd.DataFrame([], columns=["hi"])
+
+def process_stat(s):
+    if "collectorId" in s:
+        r = {
+            "id": s["objectId"],
+            "timestamp": s["objectTime"],
+        }
+        r.update(s["collectorStats"])
+        return r
+
+df = pd.DataFrame()
 # st.line_chart(df)
 
+if st.button('Say hello'):
+    st.write('Why hello there')
+else:
+    st.write('Goodbye')
 
-q = Queue()
-def monitor(pv):
-    array = pv["value"][0]["floatValue"]
-    q.put(np.reshape(array, (64, 64)))
-
-c = pvaccess.Channel("collector:1:output")
-c.monitor(monitor)
-
-
+col1, col2, col3 = st.columns(3)
 
 # def echo(x):
 #     global df
 #     new_collected = x['collectorStats']['nCollected']
 #     df[time.now()] = new_collected
-while True:
-    with st.empty():
-        frame = q.get()
-        st.image(frame)
-        print("hihi")
+with col1, st.empty():
+    for line in tail("-f", "/tmp/stat.txt", _iter=True):
+        j = process_stat(json.loads(line))
+        st.json(j)
+        # print(j)
+        # d = pd.DataFrame([j])
+        # df = pd.concat([df, d])
+        # st.line_chart(df, x="timestamp")
 
 # c.subscribe('echo', echo)
 # c.startMonitor()
