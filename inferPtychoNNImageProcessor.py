@@ -96,7 +96,10 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         if self.isDone:
             return
         (frameId,image,nx,ny,nz,colorMode,fieldKey) = self.reshapeNtNdArray(pvObject)
-        self.tq_frame_q.put((frameId, image, ny, nx, pvObject.get("attribute", [])))
+        attributes = []
+        if 'attribute' in pvObject:
+            attributes = pvObject['attribute']
+        self.tq_frame_q.put((frameId, image, ny, nx, attributes))
         return pvObject
 
     def resetStats(self):
@@ -131,3 +134,6 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
             'inferRate' : pva.DOUBLE,
             'frameProcessingRate' : pva.DOUBLE
         }
+
+    def getOutputPvObjectType(self, pvObject):
+        return pva.NtNdArray()

@@ -56,7 +56,9 @@ class inferPtychoNNtrt:
 
             frameId = int(frm_id_list[j])
             outputNtNdArray = self.pvapyProcessor.generateNtNdArray2D(frameId, image)
-            new_attr = outputNtNdArray.get("attribute")
-            new_attr.extend(attr)
+            new_attr = attr
+            if 'attribute' in outputNtNdArray:
+                attributes = outputNtNdArray['attribute']
+                new_attr.extend(attributes)
             outputNtNdArray["attribute"] = new_attr
             self.pvapyProcessor.updateOutputChannel(outputNtNdArray)
