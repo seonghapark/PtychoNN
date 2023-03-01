@@ -1,0 +1,2 @@
+# Waggle at APS
+This folder contains scripts to launch PVA consumers and collectors to the server machines. The scripts are designed to work in this specific environment, and do not guarantee it would work on other environment.

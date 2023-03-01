@@ -9,7 +9,7 @@ docker run -d \
 --network host \
 --volume $SAVE_PATH:/data \
 --entrypoint pvapy-hpc-consumer \
-classicblue/ptychonn:0.5.0 \
+classicblue/ptychonn:0.5.3 \
   --input-channel collector:1:output \
   --output-channel file:*:output \
   --control-channel file:*:control \
