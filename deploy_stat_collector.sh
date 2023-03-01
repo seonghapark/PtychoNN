@@ -6,7 +6,7 @@ docker run -d \
 --network host \
 --volume $(pwd):/data \
 --entrypoint python3 \
-classicblue/ptychonn:0.5.4 \
+classicblue/ptychonn:0.5.5 \
   /app/stat-exporter.py \
   --output-filepath "/data/output/stat.txt" \
   --channel-name "processor:1:status" \
