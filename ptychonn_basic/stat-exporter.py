@@ -1,5 +1,6 @@
 import argparse
 import time
+import json
 from pathlib import Path
 from multiprocessing import Process, Queue, Event
 
@@ -8,12 +9,12 @@ import pvaccess
 
 def stat_worker(cn, id, q, kill_sig):
     def monitor(pv):
-        j = pv.toJSON(False)
+        j = json.loads(pv.toJSON(False))
         # all consumers send status with consumerId as 1 :$
         # we override the id with the channel number as it represents
         # the actual consumer ID
         if "consumerId" in j:
-            cid = j.get("consumerId")
+            cid = int(j["consumerId"])
             j["consumerId"] = id + cid - 1
         q.put(j)
     c = pvaccess.Channel(cn)
@@ -34,7 +35,7 @@ def main(args):
     print(args.channels)
     for cn in args.channels:
         print(f'subscribing channel {cn}')
-        id = int(cn.split(":")[2])
+        id = int(cn.split(":")[1])
         print(f'channel id: {id}')
         w = Process(target=stat_worker, args=(cn, id, q, kill_signal), daemon=True)
         w.start()

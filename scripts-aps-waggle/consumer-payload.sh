@@ -10,7 +10,7 @@ docker run -d \
   --runtime nvidia \
   --shm-size 32G \
   --entrypoint pvapy-hpc-consumer \
-  classicblue/ptychonn:0.5.2-ml-amd64 \
+  classicblue/ptychonn:0.5.3-ml-amd64 \
   --input-channel pvapy:waggle1 \
   --control-channel processor:$CONSUMER_ID:control \
   --status-channel processor:$CONSUMER_ID:status \
