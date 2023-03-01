@@ -1,9 +1,11 @@
 import os
 import numpy as np
 import multiprocessing as mp
+import subprocess
 import threading
 import queue
 import time
+import psutil
 import pvapy as pva
 from pvapy.hpc.adImageProcessor import AdImageProcessor
 
@@ -23,6 +25,11 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         self.output_x = configDict.get("output_x", 128)
         self.output_y = configDict.get("output_y", 128)
         self.nGPU = int(configDict.get("n_gpu", 1))
+
+        # monitoring
+        self.network_interface_to_monitor = configDict.get("net", "")
+        self.m_network_rx_last = 0.
+        self.m_network_tx_last = 0.
         self.isDone = False
 
     def inferWorker(self):
@@ -106,27 +113,88 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         self.nFramesProcessed = 0
         self.nBatchesProcessed = 0
         self.inferTime = 0
+        self.m_network_tx_last = 0.
+        self.m_network_rx_last = 0.
+
+    def getMetrics(self):
+        m = {}
+        g_metric_command = "/usr/bin/nvidia-smi --query-gpu=memory.used,power.draw,utilization.gpu,utilization.memory --format=csv,noheader,nounits"
+        # we expect to get a csv looking like,
+        # b'877, 10.98, 0, 0\n'
+        g_metric_raw = subprocess.check_output(g_metric_command, shell=True).decode().strip()
+        sp = g_metric_raw.split(",")
+        m["gpuMemUsed"] = sp[0].strip()
+        m["gpuPowerWUsed"] = sp[1].strip()
+        m["gpuUtil"] = sp[2].strip()
+        m["gpuUtilMem"] = sp[3].strip()
+        # according to https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt
+        # total used memory = RSS + CACHE + (SWAP)
+        # we ingore SWAP as we don't expect to use it
+        with open("/sys/fs/cgroup/memory/memory.stat") as file:
+            cache = 0
+            rss = 0
+            for l in file:
+                sp = l.split(" ")
+                if sp[0] == "cache":
+                    cache = int(sp[1])
+                elif sp[0] == "rss":
+                    rss = int(sp[1])
+            m["memUsed"] = rss + cache
+        m["cpuUtil"] = psutil.cpu_percent()
+        if self.network_interface_to_monitor != "":
+            n = psutil.net_io_counters(pernic=True)
+            if self.network_interface_to_monitor not in n:
+                self.logger.error(f'failed to find network {self.network_interface_to_monitor} to monitor')
+            else:
+                # expected format is
+                # snetio(bytes_sent=8670463628, bytes_recv=7493883175, packets_sent=30910313, packets_recv=20757489, errin=1, errout=0, dropin=0, dropout=0)
+                n_metric = list(n[self.network_interface_to_monitor])
+                tx = n_metric[0]/1e9
+                rx = n_metric[1]/1e9
+                # the first measurement skips reporting
+                if self.m_network_rx_last == 0.:
+                    m["netTxUsed"] = 0.
+                    m["netRxUsed"] = 0.
+                    self.m_network_tx_last = tx
+                    self.m_network_rx_last = rx
+                else:
+                    m["netTxUsed"] = tx - self.m_network_tx_last
+                    m["netRxUsed"] = rx - self.m_network_rx_last
+                    self.m_network_tx_last = tx
+                    self.m_network_rx_last = rx
+        return m
+
 
     # Retrieve statistics for user processor
     def getStats(self):
+        stat = self.getMetrics()
         inferRate = 0
         frameProcessingRate = 0
         if self.nBatchesProcessed  > 0:
             inferRate = self.nBatchesProcessed /self.inferTime
             frameProcessingRate = self.nFramesProcessed/self.inferTime
         nFramesQueued = self.tq_frame_q.qsize()
-        return {
+        stat.update({
             'nFramesProcessed' : self.nFramesProcessed,
             'nBatchesProcessed' : self.nBatchesProcessed,
             'nFramesQueued' : nFramesQueued,
             'inferTime' : self.inferTime,
             'inferRate' : inferRate,
             'frameProcessingRate' : frameProcessingRate
-        }
+        })
+        return stat
 
     # Define PVA types for different stats variables
     def getStatsPvaTypes(self):
         return {
+            "gpuMemUsed": pva.UINT,
+            "gpuPowerWUsed": pva.FLOAT,
+            "gpuUtil": pva.UINT,
+            "gpuUtilMem": pva.UINT,
+            "memUsed": pva.UINT,
+            "cpuUtil": pva.FLOAT,
+            "netTxUsed": pva.FLOAT,
+            "netRxUsed": pva.FLOAT,
             'nFramesProcessed' : pva.UINT,
             'nBatchesProcessed' : pva.UINT,
             'nFramesQueued' : pva.UINT,
