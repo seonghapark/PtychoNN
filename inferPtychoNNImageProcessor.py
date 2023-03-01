@@ -123,10 +123,10 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
         # b'877, 10.98, 0, 0\n'
         g_metric_raw = subprocess.check_output(g_metric_command, shell=True).decode().strip()
         sp = g_metric_raw.split(",")
-        m["gpuMemUsed"] = sp[0].strip()
-        m["gpuPowerWUsed"] = sp[1].strip()
-        m["gpuUtil"] = sp[2].strip()
-        m["gpuUtilMem"] = sp[3].strip()
+        m["gpuMemUsed"] = int(sp[0].strip())
+        m["gpuPowerWUsed"] = float(sp[1].strip())
+        m["gpuUtil"] = int(sp[2].strip())
+        m["gpuUtilMem"] = int(sp[3].strip())
         # according to https://www.kernel.org/doc/Documentation/cgroup-v1/memory.txt
         # total used memory = RSS + CACHE + (SWAP)
         # we ingore SWAP as we don't expect to use it
