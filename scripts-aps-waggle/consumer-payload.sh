@@ -1,6 +1,7 @@
 #!/bin/bash
 
 CONSUMER_ID=$1
+N_CONSUMERS=$2
 
 docker rm -f pva-consumer-$CONSUMER_ID
 
@@ -12,14 +13,16 @@ docker run -d \
   --entrypoint pvapy-hpc-consumer \
   classicblue/ptychonn:0.5.3-ml-amd64 \
   --input-channel pvapy:waggle1 \
-  --control-channel processor:$CONSUMER_ID:control \
-  --status-channel processor:$CONSUMER_ID:status \
-  --output-channel processor:$CONSUMER_ID:output \
+  --consumer-id $CONSUMER_ID \
+  --control-channel processor:*:control \
+  --status-channel processor:*:status \
+  --output-channel processor:*:output \
   --processor-file /app/inferPtychoNNImageProcessor.py \
   --processor-class InferPtychoNNImageProcessor \
   --processor-args '{"onnx_mdl": "/app/model_512.trt", "output_x": 64, "output_y": 64}' \
   --report-period 5 \
-  --server-queue-size 10000 \
+  --n-consumers $N_CONSUMERS \
+  --server-queue-size 100 \
   --monitor-queue-size 1000 \
   --distributor-updates 8 \
   --disable-curses

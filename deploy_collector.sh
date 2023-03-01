@@ -15,6 +15,6 @@ classicblue/ptychonn:0.5.4 \
   --processor-class pvapy.hpc.userDataProcessor.UserDataProcessor \
   --report-period 5 \
   --server-queue-size 10000 \
-  --collector-cache-size 1 \
+  --collector-cache-size 1000 \
   --monitor-queue-size 2000 \
   --disable-curses
