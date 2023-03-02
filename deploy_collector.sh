@@ -7,7 +7,7 @@ docker run -d \
 --entrypoint pvapy-hpc-collector \
 classicblue/ptychonn:0.5.4 \
   --collector-id 1 \
-  --producer-id-list "range(1,10,1)" \
+  --producer-id-list "range(1,27,1)" \
   --input-channel processor:*:output \
   --control-channel collector:*:control \
   --status-channel collector:*:status \

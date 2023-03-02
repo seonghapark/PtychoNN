@@ -139,8 +139,9 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
                     cache = int(sp[1])
                 elif sp[0] == "rss":
                     rss = int(sp[1])
-            m["memUsed"] = rss + cache
-        m["cpuUtil"] = psutil.cpu_percent()
+            # make it to GB
+            m["memUsed"] = (rss + cache) / 1e9
+        m["cpuUtil"] = float(psutil.cpu_percent())
         if self.network_interface_to_monitor != "":
             n = psutil.net_io_counters(pernic=True)
             if self.network_interface_to_monitor not in n:
@@ -149,6 +150,7 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
                 # expected format is
                 # snetio(bytes_sent=8670463628, bytes_recv=7493883175, packets_sent=30910313, packets_recv=20757489, errin=1, errout=0, dropin=0, dropout=0)
                 n_metric = list(n[self.network_interface_to_monitor])
+                # make them to GB
                 tx = n_metric[0]/1e9
                 rx = n_metric[1]/1e9
                 # the first measurement skips reporting
@@ -191,7 +193,7 @@ class InferPtychoNNImageProcessor(AdImageProcessor):
             "gpuPowerWUsed": pva.FLOAT,
             "gpuUtil": pva.UINT,
             "gpuUtilMem": pva.UINT,
-            "memUsed": pva.UINT,
+            "memUsed": pva.FLOAT,
             "cpuUtil": pva.FLOAT,
             "netTxUsed": pva.FLOAT,
             "netRxUsed": pva.FLOAT,

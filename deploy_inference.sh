@@ -13,7 +13,7 @@ do
   --runtime nvidia \
   --shm-size 32G \
   --entrypoint pvapy-hpc-consumer \
-  classicblue/ptychonn:0.5.3-ml-amd64 \
+  classicblue/ptychonn:0.5.4-ml-amd64 \
   --input-channel pvapy:image \
   --control-channel processor:$n:control \
   --status-channel processor:$n:status \
