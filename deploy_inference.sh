@@ -20,7 +20,7 @@ do
   --output-channel processor:$n:output \
   --processor-file /app/inferPtychoNNImageProcessor.py \
   --processor-class InferPtychoNNImageProcessor \
-  --processor-args '{"onnx_mdl": "/app/model_512.trt", "output_x": 64, "output_y": 64}' \
+  --processor-args '{"onnx_mdl": "/app/model_512_fp16.trt", "output_x": 64, "output_y": 64}' \
   --report-period 5 \
   --server-queue-size 10000 \
   --monitor-queue-size 1000 \

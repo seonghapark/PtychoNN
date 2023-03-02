@@ -21,7 +21,7 @@ docker run -d \
   --output-channel processor:*:output \
   --processor-file /app/inferPtychoNNImageProcessor.py \
   --processor-class InferPtychoNNImageProcessor \
-  --processor-args '{"onnx_mdl": "/app/model_512.trt", "output_x": 64, "output_y": 64, "net": "wan0"}' \
+  --processor-args '{"onnx_mdl": "/app/model_512_fp16.trt", "output_x": 64, "output_y": 64, "net": "wan0"}' \
   --report-period 5 \
   --n-consumers $N_CONSUMERS \
   --server-queue-size 100 \
